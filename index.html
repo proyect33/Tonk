@@ -1,0 +1,2597 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entretenimiento</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- JWPlayer -->
+    <script src="https://ssl.p.jwpcdn.com/player/v/8.18.4/jwplayer.js"></script>
+    <!-- Replace with your actual JWPlayer key or remove if using free version -->
+    <script type="text/javascript">jwplayer.key = "W7zSm81+mmIsg7F+fyHRKhF3ggLkTqtGMhvI92kbqf/ysE99";</script>
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: white;
+        }
+        .navbar {
+            background-color: #1a1a1a;
+            padding: 20px;
+            text-align: center;
+        }
+        .nav-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .nav-button:hover {
+            background-color: #555;
+        }
+        .panel {
+            display: flex;
+            flex-direction: column; /* Use column layout for sections */
+            padding: 20px;
+        }
+        .content-section { /* New wrapper for sections */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+        .content-card {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            margin: 15px;
+            width: 200px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+            position: relative;
+            cursor: pointer; /* Indicate clickable */
+        }
+        .content-card:hover {
+            transform: scale(1.05);
+        }
+        .content-image {
+            width: 100%;
+            height: 300px;
+            background-color: #333;
+            border-bottom: 1px solid #444;
+        }
+         .content-image img {
+             width: 100%;
+             height: 100%;
+             object-fit: cover;
+             display: block;
+         }
+        .content-info {
+            padding: 15px 15px 40px 15px;
+        }
+        .content-title {
+            font-size: 16px;
+            margin: 5px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .content-type {
+            color: #aaa;
+            font-size: 14px;
+        }
+         .content-extra-info {
+             margin-top: 5px;
+         }
+         .content-overview {
+             color:#bbb;
+             font-size:14px;
+             display: -webkit-box;
+             -webkit-line-clamp: 3; /* Limit to 3 lines */
+             -webkit-box-orient: vertical;
+             overflow: hidden;
+             text-overflow: ellipsis;
+             margin-top: 5px;
+         }
+         .content-genres {
+             color:#d44263;
+             font-size:13px;
+             margin-bottom:6px;
+             white-space: nowrap;
+             overflow: hidden;
+             text-overflow: ellipsis;
+         }
+         .content-rating {
+             color:#f4d942;
+             font-size:13px;
+         }
+
+
+        .active {
+            background-color: #e50914;
+        }
+        .active:hover {
+            background-color: #f40612;
+        }
+        .add-section-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 20px auto 0 auto;
+            display: block;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .add-section-button:hover {
+            background: #45a049;
+        }
+        .section-header {
+            width: 100%;
+            text-align: center;
+            color: #f40612;
+            font-size: 22px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+         .no-content-message {
+             margin: 32px auto 48px auto;
+             color: #ddd;
+             font-size: 18px;
+             width: 100%;
+             text-align: center;
+         }
+
+
+        /* Opciones botón (3 puntitos) */
+        .content-options-btn {
+            position: absolute;
+            top: 13px;
+            right: 13px;
+            background: rgba(30,30,30,0.92);
+            border: none;
+            color: #fff;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 8;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.11);
+            transition: background .17s;
+        }
+        .content-options-btn:hover {
+            background: #383838;
+        }
+        .content-options-menu {
+            display: none;
+            position: absolute;
+            top: 48px;
+            right: 14px;
+            background: #232323;
+            color: #fff;
+            border-radius: 8px;
+            min-width: 143px;
+            z-index: 30;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+            padding: 7px 0;
+            font-size: 15px;
+        }
+        .content-options-menu.open {
+            display: block;
+        }
+        .content-options-item {
+            width: 100%;
+            color: #fff;
+            background: none;
+            border: none;
+            text-align: left;
+            padding: 9px 18px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background .15s;
+        }
+        .content-options-item:hover {
+            background: #353535;
+        }
+        .content-options-item.del {
+            color: #ff5060;
+        }
+        .content-options-item.del:hover {
+            background: #4a2227;
+        }
+        .content-options-item i {
+            margin-right: 8px;
+            width: 14px; /* Align text */
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        /* General Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 50;
+            left: 0; top: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+             overflow-y: auto; /* Allow scrolling within the modal if content overflows */
+             padding: 20px; /* Add padding for smaller screens */
+             box-sizing: border-box;
+        }
+        .modal-content {
+            background: #222;
+            border-radius: 10px;
+            padding: 30px 24px;
+            max-width: 420px;
+            width: 100%; /* Use 100% width within padding */
+            box-shadow: 0 6px 40px rgba(0,0,0,0.3);
+             position: relative; /* Needed for absolute positioning of close button */
+             box-sizing: border-box;
+        }
+
+        /* Specific Modal Styles */
+        #tmdb-modal .modal-content { max-width: 480px; }
+        #edit-modal .modal-content { max-width: 520px; }
+        #player-modal .modal-content { max-width: 800px; padding: 20px; /* Adjust padding for player modal */ }
+
+
+        .close-modal {
+            position: absolute; /* Position relative to modal-content */
+            top: 10px;
+            right: 10px;
+            font-size: 22px;
+            color: #aaa;
+            cursor: pointer;
+            z-index: 60; /* Ensure close button is on top */
+        }
+        .close-modal:hover {
+            color: #f40612;
+        }
+
+        /* TMDB Search Modal Styles */
+        .tmdb-search-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+        .tmdb-search-input-group {
+            display: flex;
+            gap: 7px;
+            margin-bottom: 18px;
+        }
+        .tmdb-search-input {
+            flex: 1;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #333;
+            padding: 8px;
+            outline: none;
+            background: #292929;
+            color: white;
+        }
+        .tmdb-search-btn {
+            font-size: 15px;
+            background: #f40612;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background .2s;
+        }
+        .tmdb-search-btn:hover {
+            background: #e50914;
+        }
+        .tmdb-search-result-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 320px;
+            overflow-y: auto;
+        }
+        .tmdb-search-result {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            background: #242424;
+            cursor: default;
+            transition: background 0.17s;
+            min-height: 50px;
+        }
+        .tmdb-search-result:hover {
+            background: #383838;
+        }
+        .tmdb-search-result-image {
+            width: 38px;
+            height: 54px;
+            object-fit: cover;
+            border-radius: 3px;
+            background: #222;
+            flex-shrink: 0;
+        }
+         .tmdb-search-result-image img {
+             width: 100%;
+             height: 100%;
+             object-fit: cover;
+             border-radius: 3px;
+         }
+        .tmdb-search-info-block {
+            flex: 1;
+            min-width: 0;
+        }
+        .tmdb-search-info-title {
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            white-space: normal;
+            word-break: break-word;
+        }
+        .tmdb-search-info-date {
+            color: #aaa;
+            font-size: 13px;
+            padding-left: 4px;
+        }
+        .tmdb-search-addbtn {
+            background: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 13px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background .18s;
+            flex-shrink: 0;
+        }
+        .tmdb-search-addbtn:hover:enabled {
+            background: #31913f;
+        }
+        .tmdb-search-addbtn:disabled {
+            background: #777;
+            cursor: default;
+        }
+        .tmdb-search-noresult {
+            color: #bbb;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        /* Edit Modal Styles */
+        .edit-modal-input, .edit-modal-textarea {
+            width: 100%;
+            background: #363636;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 9px;
+            font-size: 16px;
+            margin-bottom: 13px;
+            box-sizing: border-box;
+        }
+         .edit-modal-textarea {
+             resize: vertical;
+         }
+        .edit-actions-bar {
+            display: flex;
+            gap: 13px;
+            justify-content: flex-end;
+            margin-top: 13px;
+        }
+        .edit-modal-label {
+            margin-bottom: 4px;
+            color: #bbb;
+            font-size: 13px;
+        }
+        .edit-servers-list {
+            margin: 0 0 12px 0; padding: 0;
+            list-style: none;
+        }
+        .edit-server-item {
+            flex-direction: column;
+            gap: 7px;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #292929;
+            position: relative;
+        }
+        .edit-server-input, .edit-server-select {
+            flex: 1;
+            background: #292929;
+            color: #fff;
+            border: 1px solid #353535;
+            border-radius: 4px;
+            padding: 7px 8px;
+            font-size: 15px;
+            width: calc(100% - 16px);
+            box-sizing: border-box;
+            margin-bottom: 8px;
+        }
+        .edit-server-input:last-child, .edit-server-select:last-child {
+            margin-bottom: 0;
+        }
+        .remove-server-btn {
+            background: #e50914;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 9px;
+            font-size: 14px;
+            cursor: pointer;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 5;
+        }
+        .remove-server-btn:hover {
+            background: #bb0712;
+        }
+        .add-server-btn {
+            background: #4682ff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 13px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-bottom: 14px;
+            margin-top: 2px;
+            display:block;
+        }
+        .add-server-btn:hover {
+            background: #225fcc;
+        }
+        .edit-server-btn:hover { /* This class name seems unused, keep for now */
+            background: #225fcc;
+        }
+        .edit-modal-label.server-label {
+            font-size: 12px;
+            color: #bbb;
+            margin-bottom: 3px;
+            display: block;
+        }
+        .edit-server-select {
+             appearance: none;
+             background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M287%2C114.7L159.6%2C242c-5.4%2C5.4-14.2%2C5.4-19.6%2C0L5.4%2C114.7c-5.4-5.4-5.4-14.2%2C0-19.6l19.6-19.6c5.4-5.4%2C14.2-5.4%2C19.6%2C0L140%2C150.8l109.4-109.4c5.4-5.4%2C14.2-5.4%2C19.6%2C0l19.6%2C19.6C292.4%2C100.5%2C292.4%2C109.3%2C287%2C114.7z%22%2F%3E%3C%2Fsvg%3E');
+             background-repeat: no-repeat;
+             background-position: right 8px top 50%;
+             background-size: 12px auto;
+             padding-right: 30px;
+        }
+
+
+        /* Config Section Styles */
+        .config-section {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .config-section h2 {
+            margin-top: 0;
+            color: #f40612;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .config-group {
+            margin-bottom: 20px;
+        }
+        .config-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #bbb;
+            font-size: 15px;
+        }
+        .config-input {
+            width: calc(100% - 22px); /* Account for padding and border */
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #292929;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .config-save-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .config-save-button:hover {
+            background: #45a049;
+        }
+
+        /* Player Modal Styles */
+        #player-modal .modal-content {
+             background: #1a1a1a;
+             border: none;
+             padding: 0;
+             display: flex;
+             flex-direction: column;
+             max-height: 95vh; /* Limit height to prevent overflow */
+        }
+        #player-modal .close-modal {
+             top: 10px;
+             right: 15px;
+             z-index: 110; /* Higher z-index for player modal close button */
+        }
+
+        .player-header {
+            position: relative;
+            width: 100%;
+            padding: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: flex-end;
+            min-height: 300px; /* Adjusted min-height */
+            color: white;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        .player-header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: var(--bg-image); /* Use CSS variable for background */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 10; /* Below content */
+            opacity: 0.3; /* Make background semi-transparent */
+        }
+         .player-header-content {
+             position: relative;
+             z-index: 20; /* Above background image */
+             display: flex;
+             flex-wrap: wrap;
+             gap: 30px;
+             align-items: flex-end;
+             width: 100%;
+         }
+        .player-title-bar {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        .player-title-bar h2 {
+            margin: 0;
+            font-size: 2rem;
+            flex-grow: 1;
+        }
+        .player-share-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .player-share-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .player-poster {
+            width: 180px; /* Adjusted poster size */
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+             flex-shrink: 0;
+        }
+        .player-poster:hover {
+             transform: scale(1.03);
+        }
+         .player-poster img {
+             width: 100%;
+             border-radius: 10px;
+             display: block;
+         }
+
+
+        .player-info {
+            flex: 1;
+            min-width: 250px; /* Adjusted min-width */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+        }
+        .player-info h2 {
+            font-size: 2rem; /* Adjusted font size */
+            margin: 0;
+        }
+        .player-details-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+         .player-details-list li {
+             display: flex;
+             align-items: center;
+             gap: 5px;
+         }
+
+        .player-overview {
+            font-size: 1rem; /* Adjusted font size */
+            line-height: 1.5;
+             max-height: 120px; /* Limit overview height */
+             overflow-y: auto; /* Add scroll if text overflows */
+             padding-right: 5px; /* Add padding for scrollbar */
+        }
+         /* Custom scrollbar for overview */
+         .player-overview::-webkit-scrollbar { width: 6px; }
+         .player-overview::-webkit-scrollbar-track { background: #333; border-radius: 3px; }
+         .player-overview::-webkit-scrollbar-thumb { background: #555; border-radius: 3px; }
+         .player-overview::-webkit-scrollbar-thumb:hover { background: #777; }
+
+
+        .player-more-data {
+            margin-top: 15px; /* Adjusted margin */
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Adjusted gap */
+        }
+
+        .player-more-data span { /* Changed p to span */
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 10px; /* Adjusted padding */
+            border-radius: 15px; /* Adjusted border-radius */
+            font-size: 0.8rem; /* Adjusted font size */
+            color: #ddd;
+        }
+
+         .player-main-content {
+             padding: 0 20px 20px 20px; /* Padding for the main content area */
+             flex-grow: 1; /* Allow this section to grow */
+             display: flex;
+             flex-direction: column;
+         }
+
+
+        /* Contenedores para reproductores */
+        .player-video-container {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            position: relative;
+            background: #000;
+            margin-bottom: 20px;
+             flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .player-video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+         #player-jw-container {
+             width: 100%;
+             height: 100%;
+             position: absolute;
+             top: 0;
+             left: 0;
+         }
+
+         /* Hide containers */
+         .player-video-container:not(.active),
+         .player-trailer-container:not(.active) {
+             display: none;
+         }
+
+
+        /* Estilos para los botones de servidor */
+        .player-server-buttons-container {
+             margin-top: 10px;
+             flex-grow: 1; /* Allow server buttons section to grow */
+             overflow-y: auto; /* Add scroll for server list */
+             padding-right: 5px; /* Padding for scrollbar */
+        }
+        /* Custom scrollbar for server buttons */
+         .player-server-buttons-container::-webkit-scrollbar { width: 6px; }
+         .player-server-buttons-container::-webkit-scrollbar-track { background: #333; border-radius: 3px; }
+         .player-server-buttons-container::-webkit-scrollbar-thumb { background: #555; border-radius: 3px; }
+         .player-server-buttons-container::-webkit-scrollbar-thumb:hover { background: #777; }
+
+        .player-server-buttons-container h4 {
+             color: #f40612; /* Changed color */
+             margin-bottom: 15px;
+             margin-top: 0;
+        }
+
+
+        .servidor-btn {
+            padding: 10px 15px;
+            background: #2c2c2c; /* Adjusted background */
+            border: 1px solid #444; /* Adjusted border */
+            border-radius: 5px; /* Adjusted border-radius */
+            color: #fff; /* Adjusted color */
+            cursor: pointer;
+            transition: all 0.2s ease; /* Adjusted transition */
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px; /* Adjusted margin */
+            width: 100%;
+            box-sizing: border-box;
+            text-align: left; /* Align text left */
+        }
+
+        .servidor-btn i {
+            font-size: 1rem; /* Adjusted icon size */
+        }
+
+        .servidor-btn:hover {
+            background: #3d3d3d; /* Adjusted hover background */
+        }
+
+        .servidor-btn.active {
+            background: #f40612; /* Use accent color for active */
+            color: #fff;
+            border-color: #f40612;
+            font-weight: bold;
+        }
+
+         .servidor-btn .server-name {
+             flex-grow: 1; /* Allow name to take space */
+         }
+         .servidor-btn .server-lang {
+             font-size: 0.8rem;
+             color: #ccc; /* Lighter color for language */
+         }
+
+
+         /* Trailer button */
+         .trailer-btn {
+             display: inline-block;
+             margin-top: 10px;
+             padding: 8px 15px;
+             background: #4682ff;
+             color: #fff;
+             border: none;
+             border-radius: 5px;
+             cursor: pointer;
+             font-size: 0.9rem;
+             transition: background 0.2s;
+             margin-right: 10px;
+         }
+         .trailer-btn:hover {
+             background: #225fcc;
+         }
+
+         .player-trailer-container {
+             width: 100%;
+             height: 0;
+             padding-bottom: 56.25%; /* 16:9 aspect ratio */
+             position: relative;
+             background: #000;
+             margin-bottom: 20px;
+             flex-shrink: 0;
+         }
+         .player-trailer-container iframe {
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             border: none;
+         }
+
+         .no-servers-message {
+             color: #bbb;
+             text-align: center;
+             margin-top: 20px;
+             font-size: 1rem;
+         }
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .player-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 20px 20px 0 20px; /* Adjust padding */
+                min-height: auto; /* Allow height to be dynamic */
+            }
+            .player-header-content {
+                 flex-direction: column;
+                 align-items: center;
+                 text-align: center;
+                 gap: 20px;
+            }
+
+            .player-poster {
+                width: 150px; /* Smaller poster on mobile */
+            }
+             .player-info {
+                 min-width: auto; /* Reset min-width */
+                 width: 100%; /* Take full width */
+             }
+
+             .player-info h2 {
+                 font-size: 1.8rem; /* Smaller title */
+             }
+             .player-details-list {
+                 justify-content: center; /* Center details list */
+                 gap: 10px;
+                 margin-bottom: 10px;
+             }
+             .player-overview {
+                 max-height: 80px; /* Shorter overview */
+             }
+             .player-more-data {
+                 justify-content: center; /* Center tags */
+                 gap: 8px;
+             }
+            .player-main-content {
+                padding: 0 15px 15px 15px; /* Adjust padding */
+            }
+             #player-modal .modal-content {
+                  max-height: 90vh; /* Adjust max height */
+             }
+
+
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <button class="nav-button filter-button active" data-type="all" onclick="showContent('all', event)">Inicio</button>
+        <button class="nav-button filter-button" data-type="series" onclick="showContent('series', event)">Series</button>
+        <button class="nav-button filter-button" data-type="movie" onclick="showContent('movie', event)">Películas</button>
+        <button class="nav-button filter-button" data-type="config" onclick="showContent('config', event)">Configuración</button>
+    </div>
+
+    <div class="panel" id="content-panel">
+        <!-- Contenido se insertará dinámicamente aquí -->
+    </div>
+
+    <!-- TMDB Search Modal -->
+    <div class="modal" id="tmdb-modal">
+      <div class="modal-content">
+        <span class="close-modal" onclick="closeTmdbModal()">&times;</span>
+        <div class="tmdb-search-title" id="tmdb-modal-title">Buscador TMDB</div>
+        <div class="tmdb-search-input-group">
+          <input id="tmdb-searchinput" class="tmdb-search-input" type="text" placeholder="Buscar...">
+          <button class="tmdb-search-btn" id="tmdb-search-btn">Buscar</button>
+        </div>
+        <ul class="tmdb-search-result-list" id="tmdb-resultlist"></ul>
+        <div class="tmdb-search-noresult" id="tmdb-noresult" style="display:none;">No encontrado.</div>
+      </div>
+    </div>
+
+    <!-- Editar/Servidores Modal -->
+    <div class="modal" id="edit-modal">
+      <div class="modal-content" id="edit-modal-content">
+        <!-- Se llena dinámico -->
+      </div>
+    </div>
+
+    <!-- Player Modal -->
+     <div class="modal" id="player-modal">
+         <div class="modal-content" id="player-modal-content">
+             <span class="close-modal" onclick="closePlayerModal()">&times;</span>
+             <div class="player-header" id="player-header" style="--bg-image: none;">
+                 <div class="player-header-content">
+                     <div class="player-poster" id="player-poster">
+                         <img src="" alt="Poster">
+                     </div>
+                     <div class="player-info">
+                         <div class="player-title-bar">
+                             <h2 id="player-title"></h2>
+                             <button id="player-share-btn" class="player-share-btn" title="Compartir enlace"><i class="fas fa-share"></i></button>
+                         </div>
+                         <ul class="player-details-list">
+                             <li><i class="fas fa-star"></i> <span id="player-rating"></span></li>
+                             <li><i class="fas fa-calendar-alt"></i> <span id="player-year"></span></li>
+                              <li id="player-runtime-li" style="display: none;"><i class="fas fa-clock"></i> <span id="player-runtime"></span></li>
+                              <li id="player-lang-li" style="display: none;"><i class="fas fa-language"></i> <span id="player-language"></span></li>
+                         </ul>
+                         <div class="player-genres" id="player-genres"></div>
+                         <div class="player-overview" id="player-overview"></div>
+                         <div class="player-more-data" id="player-more-data">
+                             <!-- Genres, production countries etc. dynamically added here -->
+                         </div>
+                         <!-- Trailer button -->
+                         <button class="trailer-btn" id="trailer-btn" style="display: none;" onclick="showTrailer()"><i class="fas fa-film"></i> Ver Trailer</button>
+                     </div>
+                 </div>
+             </div>
+             <div class="player-main-content">
+ Fifth 
+                  <div class="player-video-container active" id="player-jw-container-wrapper">
+                      <div id="player-jw-container"></div>
+                  </div>
+                 <div class="player-video-container" id="player-iframe-container">
+                     <iframe id="player-iframe" src="" allowfullscreen frameborder="0" allow="autoplay; fullscreen; picture-in-picture"></iframe>
+                 </div>
+                 <div class="player-trailer-container" id="player-trailer-container">
+                     <iframe id="player-trailer-iframe" src="" allowfullscreen frameborder="0" allow="autoplay; fullscreen; picture-in-picture"></iframe>
+                 </div>
+
+
+                 <div class="player-server-buttons-container" id="player-server-buttons-container">
+                     <h4><i class="fas fa-server"></i> Servidores disponibles:</h4>
+                     <div id="no-servers-message" class="no-servers-message" style="display: none;">No hay servidores agregados.</div>
+                     <!-- Server buttons added dynamically here -->
+                 </div>
+             </div>
+         </div>
+     </div>
+
+    <div id="toast-container"></div>
+
+    <!-- EMBED MODAL (hidden, supports ?embed=CODE deep links) -->
+    <div id="embed-root" style="display:none;">
+      <div id="embed-content">
+        <!-- Embed info will be injected here -->
+      </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {}
+        }
+    </script>
+    <script type="module">
+        // Default API key, can be overridden by user config
+        const DEFAULT_TMDB_API_KEY = "1076ac03cba68c1680094495c8506ad7";
+        const TMDB_IMAGE_URL = "https://image.tmdb.org/t/p/w300"; // Poster size for cards
+        const TMDB_BACKDROP_URL = "https://image.tmdb.org/t/p/w1280"; // Backdrop size for player header
+        const LOCAL_STORAGE_KEY = "entretenimientoData";
+        const CONFIG_STORAGE_KEY = "entretenimientoConfig";
+
+
+        let contentData = [
+            // Inicial sin series/peliculas y cada elemento además puede tener: servers:[...]
+        ];
+
+        let config = {
+            tmdbApiKey: DEFAULT_TMDB_API_KEY
+        };
+
+        let tmdbDetailsCache = {}; // Guardar detalles extra TMDB por id para evitar peticiones dobles
+
+        let tmdbModalSection = "series";
+        let lastPanelMode = 'all'; // para refrescar tras editar/borrar
+
+        // Opciones de card abierta (solo una a la vez)
+        let openOptionsMenuId = null;
+
+        // JWPlayer instance
+        let jwPlayerInstance = null;
+
+
+        // Expose functions to global scope for HTML onclick attributes
+        window.showContent = showContent;
+        window.openTmdbModal = openTmdbModal;
+        window.closeTmdbModal = closeTmdbModal;
+        window.openEditModal = openEditModal;
+        window.closeEditModal = closeEditModal;
+        window.saveEditModal = saveEditModal;
+        window.openServersModal = openServersModal;
+        window.addServerInput = addServerInput;
+        window.saveServersModal = saveServersModal;
+        window.addTmdbFoundItem = addTmdbFoundItem;
+        window.deleteContent = deleteContent;
+        window.escapeHTML = escapeHTML; // Helper used by exposed functions
+        window.toggleCardOptionsMenu = toggleCardOptionsMenu; // Used by event listeners
+        window.closeAllOptionsMenus = closeAllOptionsMenus; // Used by event listeners and other functions
+        window.saveConfig = saveConfig; // Expose saveConfig
+         window.openPlayerModal = openPlayerModal; // Expose for event delegation
+         window.closePlayerModal = closePlayerModal; // Expose
+         window.cambiarServidor = cambiarServidor; // Expose for server buttons
+         window.showTrailer = showTrailer; // Expose trailer button action
+         window.copyShareLink = copyShareLink; // Expose for sharing
+
+
+        // Load data and config from localStorage
+        function loadData() {
+            try {
+                const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+                if (storedData) {
+                    contentData = JSON.parse(storedData);
+                }
+            } catch (e) {
+                console.error("Error loading data from localStorage:", e);
+                contentData = []; // Start fresh if loading fails
+            }
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contentData));
+            } catch (e) {
+                console.error("Error saving data to localStorage:", e);
+                alert("No se pudo guardar la información. Puede que tu navegador no soporte el almacenamiento local o esté lleno.");
+            }
+        }
+
+         function loadConfig() {
+            try {
+                const storedConfig = localStorage.getItem(CONFIG_STORAGE_KEY);
+                if (storedConfig) {
+                    config = JSON.parse(storedConfig);
+                     // Ensure default key is used if saved config is missing tmdbApiKey
+                    if (!config.tmdbApiKey) {
+                         config.tmdbApiKey = DEFAULT_TMDB_API_KEY;
+                    }
+                }
+            } catch (e) {
+                console.error("Error loading config from localStorage:", e);
+                config.tmdbApiKey = DEFAULT_TMDB_API_KEY; // Use default if loading fails
+            }
+         }
+
+         function saveConfig() {
+             try {
+                const apiKeyInput = document.getElementById('config-tmdb-api-key');
+                if (apiKeyInput) {
+                    config.tmdbApiKey = apiKeyInput.value.trim() || DEFAULT_TMDB_API_KEY;
+                }
+                localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(config));
+                 alert("Configuración guardada.");
+             } catch (e) {
+                 console.error("Error saving config to localStorage:", e);
+                 alert("No se pudo guardar la configuración.");
+             }
+         }
+
+
+        // Nueva función: obtener detalles completos de TMDB para un ítem dado (movie o serie)
+        async function fetchTmdbDetails(tmdb_id, type) {
+            if (!tmdb_id) return null;
+            let cacheKey = type + "_" + tmdb_id;
+            if (tmdbDetailsCache[cacheKey]) return tmdbDetailsCache[cacheKey];
+
+            // Use the current API key from config
+            const apiKey = config.tmdbApiKey;
+            if (!apiKey || apiKey === DEFAULT_TMDB_API_KEY) {
+                 console.warn("Using default TMDB API key. Functionality might be limited.");
+            }
+
+
+            let url;
+            if (type === "series") {
+                url = `https://api.themoviedb.org/3/tv/${tmdb_id}?api_key=${apiKey}&language=es-ES&append_to_response=videos`; // Append videos for trailers
+            } else {
+                url = `https://api.themoviedb.org/3/movie/${tmdb_id}?api_key=${apiKey}&language=es-ES&append_to_response=videos`; // Append videos for trailers
+            }
+            try {
+                let resp = await fetch(url);
+                if (!resp.ok) {
+                    console.error(`TMDB details fetch error: ${resp.status}`, await resp.text());
+                    // Handle specific API key errors? For now, just log.
+                    throw new Error(`HTTP error! status: ${resp.status}`);
+                }
+                let data = await resp.json();
+                 // Clean up potentially null fields from TMDB
+                if (data.overview === null) data.overview = undefined;
+                if (data.genres === null) data.genres = undefined;
+                if (data.vote_average === null) data.vote_average = undefined;
+                 if (data.runtime === null && data.episode_run_time) data.runtime = data.episode_run_time[0]; // For series, use episode runtime
+                 if (data.runtime === null) data.runtime = undefined;
+                 if (data.spoken_languages === null) data.spoken_languages = undefined;
+                 if (data.production_countries === null) data.production_countries = undefined;
+
+
+                tmdbDetailsCache[cacheKey] = data;
+                return data;
+            } catch (e) {
+                console.error("Error fetching TMDB details:", e);
+                return null;
+            }
+        }
+
+        // Modifica para mostrar detalles enriquecidos al renderizar la card
+        function contentCardHTML(item) {
+            let cardId = item.id;
+            let imgHtml = '';
+            if (item.poster_url) {
+                imgHtml = `<div class="content-image"><img src="${escapeHTML(item.poster_url)}" alt="${escapeHTML(item.title)}" loading="lazy"></div>`;
+            } else {
+                imgHtml = `<div class="content-image" style="background: linear-gradient(45deg, #${Math.floor(Math.random()*16777215).toString(16)}, #${Math.floor(Math.random()*16777215).toString(16)});"></div>`;
+            }
+            // Use item properties, providing defaults or placeholders if undefined
+            let overview = item.overview !== undefined ? escapeHTML(item.overview) : (item.tmdb_id ? 'Cargando sinopsis...' : 'Sin sinopsis');
+            let genres = item.genres !== undefined ? escapeHTML(item.genres) : '';
+            let rating = item.rating !== undefined ? (item.rating ? `★ ${escapeHTML(item.rating)}` : '') : (item.tmdb_id ? 'Cargando...' : ''); // Handle rating display
+            let year = item.year !== undefined ? `(${escapeHTML(item.year)})` : '';
+
+
+            // Opciones
+            return `
+                <div class="content-card" data-cardid="${cardId}">
+                    ${imgHtml}
+                    <button class="content-options-btn" title="Opciones" data-cardid="${cardId}">&#8942;</button>
+                    <div class="content-options-menu" id="optionsmenu_${cardId}">
+                        <button class="content-options-item" onclick="openEditModal('${cardId}')"><i class="fas fa-pencil"></i> Editar datos</button>
+                        <button class="content-options-item" onclick="openServersModal('${cardId}')"><i class="fas fa-server"></i> Servidores</button>
+                        <button class="content-options-item" onclick="copyShareLink('${cardId}')"><i class="fas fa-share"></i> Compartir</button>
+                        <div style="border-top: 1px solid #3a3a3a; margin: 6px 0;"></div>
+                        <button class="content-options-item del" onclick="deleteContent('${cardId}')"><i class="fas fa-trash"></i> Eliminar</button>
+                    </div>
+                    <div class="content-info">
+                        <h3 class="content-title">${escapeHTML(item.title)}</h3>
+                        <p class="content-type">${item.type === 'movie' ? 'Película' : 'Serie'}</p>
+                         ${year ? `<span style="color:#aaa; font-size:13px;">${year}</span>` : ""}
+                        <div class="content-extra-info">
+                            ${genres ? `<div class="content-genres">${genres}</div>` : ''}
+                            <div class="content-overview">${overview}</div>
+                            ${rating ? `<div class="content-rating">${rating}</div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function enrichCardDetails() {
+             // Use a Set to avoid processing the same item multiple times if re-rendered quickly
+            const itemsToEnrich = contentData.filter(item => item.tmdb_id && !item._extraLoaded);
+
+             if (itemsToEnrich.length === 0) return; // No items to enrich
+
+             const apiKey = config.tmdbApiKey;
+             if (!apiKey) {
+                 console.warn("No TMDB API key available for enrichment.");
+                 return; // Cannot enrich without API key
+             }
+
+            // Process items in batches or just await all
+            const promises = itemsToEnrich.map(async item => {
+                let details = await fetchTmdbDetails(item.tmdb_id, item.type);
+                if (!details) {
+                    item._extraLoaded = true; // Mark even if failed to avoid retrying repeatedly
+                    // Update UI placeholders if fetch failed? Maybe not necessary, they'll show 'Cargando...' or empty
+                    return;
+                }
+
+                // Only update fields that haven't been manually edited (undefined)
+                let changed = false;
+                if (item.overview === undefined && details.overview !== undefined) { item.overview = (details.overview || "").trim(); changed = true; }
+                if (item.genres === undefined && details.genres !== undefined) { item.genres = (details.genres && details.genres.map(g=>g.name).join(", ")) || ""; changed = true; }
+                if (item.rating === undefined && details.vote_average !== undefined) { item.rating = details.vote_average ? (details.vote_average.toFixed(1)) : ""; changed = true; }
+                if (item.poster_url === undefined && details.poster_path) { item.poster_url = TMDB_IMAGE_URL + details.poster_path; changed = true; }
+                if (item.year === undefined && (item.type === 'series' ? details.first_air_date : details.release_date)) {
+                    item.year = (item.type === 'series' ? details.first_air_date : details.release_date).substring(0, 4); changed = true;
+                }
+                 // Add backdrop path for player header background
+                 if (item.backdrop_url === undefined && details.backdrop_path) { item.backdrop_url = TMDB_BACKDROP_URL + details.backdrop_path; changed = true; }
+                 // Add trailer ID if available
+                 if (item.trailer_id === undefined && details.videos && details.videos.results) {
+                     const trailer = details.videos.results.find(v => v.site === 'YouTube' && v.type === 'Trailer');
+                     if (trailer) { item.trailer_id = trailer.key; changed = true; }
+                 }
+                 // Add runtime/duration
+                 const runtime = details.runtime || (details.episode_run_time ? details.episode_run_time[0] : undefined);
+                 if (item.runtime === undefined && runtime !== undefined) { item.runtime = runtime; changed = true; }
+                 // Add languages (primary spoken language?) or original language
+                 const language = details.spoken_languages && details.spoken_languages.length > 0 ? details.spoken_languages[0].english_name : undefined;
+                 if (item.language === undefined && language !== undefined) { item.language = language; changed = true; }
+                  // Add production countries
+                 const countries = details.production_countries && details.production_countries.length > 0 ? details.production_countries.map(c => c.name).join(", ") : undefined;
+                 if (item.countries === undefined && countries !== undefined) { item.countries = countries; changed = true; }
+
+
+                item._extraLoaded = true; // Mark as enriched attempt
+
+                // Update the DOM elements for the specific card if it's currently visible
+                 const cardElement = document.querySelector(`.content-card[data-cardid="${item.id}"]`);
+                 if (cardElement && changed) {
+                      const overviewEl = cardElement.querySelector('.content-overview');
+                      if (overviewEl && item.overview !== undefined) overviewEl.textContent = escapeHTML(item.overview);
+
+                      const genresEl = cardElement.querySelector('.content-genres');
+                      if (genresEl && item.genres !== undefined) {
+                           genresEl.textContent = escapeHTML(item.genres);
+                           genresEl.style.display = item.genres ? '' : 'none'; // Hide if empty
+                      }
+
+                      const ratingEl = cardElement.querySelector('.content-rating');
+                      if (ratingEl && item.rating !== undefined) {
+                           ratingEl.textContent = item.rating ? `★ ${escapeHTML(item.rating)}` : '';
+                           ratingEl.style.display = item.rating ? '' : 'none'; // Hide if empty
+                      }
+                      const yearEl = cardElement.querySelector('.content-type').nextElementSibling; // Find span after type
+                      if (yearEl && yearEl.tagName === 'SPAN' && item.year !== undefined) {
+                           yearEl.textContent = item.year ? `(${escapeHTML(item.year)})` : '';
+                           yearEl.style.display = item.year ? '' : 'none'; // Hide if empty
+                      }
+
+                      const posterEl = cardElement.querySelector('.content-image img');
+                      if (posterEl && item.poster_url && posterEl.src !== item.poster_url) {
+                          posterEl.src = escapeHTML(item.poster_url);
+                      } else if (cardElement.querySelector('.content-image') && !item.poster_url) {
+                          // If no poster, ensure it falls back to placeholder style
+                           cardElement.querySelector('.content-image').style.backgroundImage = ''; // Remove potential old image
+                           cardElement.querySelector('.content-image').style.backgroundColor = '';
+                           cardElement.querySelector('.content-image').style.backgroundImage = `linear-gradient(45deg, #${Math.floor(Math.random()*16777215).toString(16)}, #${Math.floor(Math.random()*16777215).toString(16)})`;
+                           if(posterEl) posterEl.style.display = 'none'; // Hide the img tag
+                      }
+                 }
+            });
+
+            await Promise.all(promises);
+             saveData(); // Save data after enrichment batch
+        }
+
+        function showContent(type, event) {
+            // Actualizar botones activos filtro
+            document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+            if (event && event.target.classList.contains('filter-button')) {
+                event.target.classList.add('active');
+            }
+
+            lastPanelMode = type;
+
+            const panel = document.getElementById('content-panel');
+            let html = '';
+
+            if (type === 'all') {
+                // Series Section
+                const seriesList = contentData.filter(item => item.type === 'series');
+                html += `
+                    <div class="section-header">Series</div>
+                    <button class="add-section-button" onclick="openTmdbModal('series')">Agregar Serie</button>
+                    <div class="content-section">
+                        ${
+                            (seriesList.length === 0)
+                            ? `<span class="no-content-message">Sin series</span>`
+                            : seriesList.map(item => contentCardHTML(item)).join('')
+                        }
+                    </div>
+                `;
+                // Películas Section
+                const movieList = contentData.filter(item => item.type === 'movie');
+                html += `
+                    <div class="section-header">Películas</div>
+                    <button class="add-section-button" onclick="openTmdbModal('movie')">Agregar Película</button>
+                    <div class="content-section">
+                        ${
+                            (movieList.length === 0)
+                            ? `<span class="no-content-message">Sin películas</span>`
+                            : movieList.map(item => contentCardHTML(item)).join('')
+                        }
+                    </div>
+                `;
+            } else if (type === 'series') {
+                const seriesList = contentData.filter(item => item.type === 'series');
+                html += `<div class="section-header">Series</div>
+                         <button class="add-section-button" onclick="openTmdbModal('series')">Agregar Serie</button>
+                         <div class="content-section">
+                         ${
+                            (seriesList.length === 0)
+                            ? `<span class="no-content-message">Sin series</span>`
+                            : seriesList.map(item => contentCardHTML(item)).join('')
+                         }
+                         </div>
+                `;
+            } else if (type === 'movie') {
+                const movieList = contentData.filter(item => item.type === 'movie');
+                html += `<div class="section-header">Películas</div>
+                         <button class="add-section-button" onclick="openTmdbModal('movie')">Agregar Película</button>
+                         <div class="content-section">
+                         ${
+                            (movieList.length === 0)
+                            ? `<span class="no-content-message">Sin películas</span>`
+                            : movieList.map(item => contentCardHTML(item)).join('')
+                         }
+                         </div>
+                `;
+            } else if (type === 'config') {
+                html = `
+                    <div class="config-section">
+                        <h2>Configuración</h2>
+                        <div class="config-group">
+                            <label for="config-tmdb-api-key" class="config-label">Clave API de TMDB:</label>
+                            <input type="text" id="config-tmdb-api-key" class="config-input" value="${escapeHTML(config.tmdbApiKey || '')}" placeholder="Ingresa tu clave API de TMDB">
+                        </div>
+                        <button class="config-save-button" onclick="saveConfig()">Guardar Configuración</button>
+                    </div>
+                `;
+            }
+
+
+            panel.innerHTML = html;
+            // Setup event delegation for card clicks after panel content is set
+             setupPanelCardClickListeners();
+            // Setup event delegation for options buttons after panel content is set
+            setupPanelOptionsListeners();
+
+
+            // Ensure enrichment runs after DOM is updated
+            if (type !== 'config') {
+                enrichCardDetails();
+            }
+
+        }
+
+        // Setup event delegation for card clicks on the panel
+        function setupPanelCardClickListeners() {
+             const panel = document.getElementById('content-panel');
+             // Remove previous delegation listener if it exists
+             if (panel._cardClickListener) {
+                  panel.removeEventListener('click', panel._cardClickListener);
+             }
+
+             const cardClickListener = function(event) {
+                 const card = event.target.closest('.content-card');
+                 // Check that the click target is not the options button or within the options menu
+                 const optionsButton = event.target.closest('.content-options-btn');
+                 const optionsMenu = event.target.closest('.content-options-menu');
+
+                 if (card && !optionsButton && !optionsMenu) {
+                     const cardId = card.getAttribute('data-cardid');
+                     openPlayerModal(cardId);
+                 }
+             };
+             panel.addEventListener('click', cardClickListener);
+             panel._cardClickListener = cardClickListener; // Store reference to remove later
+        }
+
+
+        // BOTÓN OPCIONES / menú en cada carta (tres puntos, mostrar opciones)
+        // Using event delegation on the panel for options buttons
+        function setupPanelOptionsListeners() {
+             const panel = document.getElementById('content-panel');
+              // Remove previous delegation listener if it exists
+             if (panel._optionsListener) {
+                  panel.removeEventListener('click', panel._optionsListener);
+             }
+
+             const optionsListener = function(event) {
+                 const optionsButton = event.target.closest('.content-options-btn');
+                 if (optionsButton) {
+                      event.stopPropagation(); // Prevent card click if clicked on options button
+                      const id = optionsButton.getAttribute('data-cardid');
+                      toggleCardOptionsMenu(id); // toggleCardOptionsMenu will handle closing others
+                 }
+             };
+             panel.addEventListener('click', optionsListener);
+             panel._optionsListener = optionsListener; // Store reference
+        }
+
+        // Manejo visual del desplegable de opciones
+        function toggleCardOptionsMenu(cardId) {
+            // Close the currently open menu if any, unless it's the one we are opening
+            if (openOptionsMenuId && openOptionsMenuId !== cardId) {
+                 closeAllOptionsMenus();
+            }
+
+            const menu = document.getElementById('optionsmenu_' + cardId);
+            if (menu) {
+                const isOpen = menu.classList.contains('open');
+                closeAllOptionsMenus(); // Close all menus first
+                if (!isOpen) {
+                    menu.classList.add('open');
+                    openOptionsMenuId = cardId;
+                     // Ensure click within the menu doesn't close it via body listener
+                    // menu.onclick = e => e.stopPropagation(); // This is already handled by the general click listener now
+                } else {
+                    openOptionsMenuId = null; // The menu was already open and is now closed by closeAllOptionsMenus
+                }
+            }
+        }
+        function closeAllOptionsMenus() {
+            document.querySelectorAll('.content-options-menu.open').forEach(menu => menu.classList.remove('open'));
+            openOptionsMenuId = null;
+        }
+
+        // ---- MODALES ----
+
+        // TMDB Search Modal
+        function openTmdbModal(sectionType) {
+            tmdbModalSection = sectionType; // 'series' o 'movie'
+            document.getElementById('tmdb-modal-title').textContent =
+                sectionType === 'series' ? "Buscador de Series (TMDB)" : "Buscador de Películas (TMDB)";
+            document.getElementById('tmdb-modal').style.display = "flex";
+            setTimeout(()=>{document.getElementById('tmdb-searchinput').focus()}, 120);
+
+            document.getElementById('tmdb-resultlist').innerHTML = "";
+            document.getElementById('tmdb-noresult').style.display = "none";
+            document.getElementById('tmdb-searchinput').value = "";
+
+             // Prevent scroll behind modal
+            document.body.style.overflow = 'hidden';
+        }
+        function closeTmdbModal() {
+            document.getElementById('tmdb-modal').style.display = "none";
+            document.getElementById('tmdb-searchinput').value = "";
+            document.getElementById('tmdb-noresult').style.display = "none";
+            document.getElementById('tmdb-resultlist').innerHTML = "";
+             document.body.style.overflow = ''; // Restore scroll
+        }
+        // MODAL EDITAR DATOS
+        function openEditModal(cardId) {
+            closeAllOptionsMenus(); // Close options menu before opening modal
+            const item = contentData.find(e=>e.id===cardId);
+            if (!item) return;
+            // Modal editable de título, año, sinopsis, rating, poster_url, trailer_id
+            let html = `
+                <span class="close-modal" onclick="closeEditModal()">&times;</span>
+                <h2 style="margin-top:0;margin-bottom:14px; color: #f40612; font-size: 20px;">Editar ${item.type==='series'?'Serie':'Película'}</h2>
+
+                <div class="edit-modal-label">Título:</div>
+                <input type="text" class="edit-modal-input" id="edit-title" value="${item.title ? escapeHTML(item.title) : ''}" maxlength="72">
+
+                <div class="edit-modal-label">Año:</div>
+                <input type="text" class="edit-modal-input" id="edit-year" value="${item.year||''}" maxlength="4" pattern="[0-9]{0,4}">
+
+                <div class="edit-modal-label">Sinopsis:</div>
+                <textarea class="edit-modal-textarea" id="edit-overview" rows="4">${item.overview ? escapeHTML(item.overview) : ''}</textarea>
+
+                <div class="edit-modal-label">Clasificación (ej: 7.5):</div>
+                <input type="text" class="edit-modal-input" id="edit-rating" value="${item.rating||''}" maxlength="4" pattern="[0-9.]*">
+
+                <div class="edit-modal-label">URL de la imagen (Poster):</div>
+                <input type="text" class="edit-modal-input" id="edit-poster-url" value="${item.poster_url ? escapeHTML(item.poster_url) : ''}">
+
+                 <div class="edit-modal-label">URL de la imagen (Fondo):</div>
+                 <input type="text" class="edit-modal-input" id="edit-backdrop-url" value="${item.backdrop_url ? escapeHTML(item.backdrop_url) : ''}">
+
+
+                <div class="edit-modal-label">ID del Trailer (YouTube):</div>
+                <input type="text" class="edit-modal-input" id="edit-trailer-id" value="${item.trailer_id ? escapeHTML(item.trailer_id) : ''}">
+
+
+                <div class="edit-actions-bar">
+                    <button onclick="closeEditModal()" style="background:#2c2c2c;color:#fff;padding:8px 17px;border:none;border-radius:5px;font-size:15px;cursor:pointer;">Cancelar</button>
+                    <button onclick="saveEditModal('${cardId}')" style="background:#e50914;color:#fff;padding:8px 17px;border:none;border-radius:5px;font-size:15px;cursor:pointer;">Guardar</button>
+                </div>
+            `;
+            let editModal = document.getElementById('edit-modal');
+            document.getElementById('edit-modal-content').innerHTML = html;
+            editModal.style.display = 'flex';
+
+            // Prevent scroll behind modal
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Helper to prevent XSS in input values
+        function escapeHTML(str) {
+             if (str === undefined || str === null) return '';
+            return String(str) // Ensure it's treated as a string
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+        function saveEditModal(cardId) {
+            let item = contentData.find(e=>e.id===cardId);
+            if (!item) return;
+            let newTitle = document.getElementById('edit-title').value.trim();
+            let newYear = document.getElementById('edit-year').value.trim();
+            let newOverview = document.getElementById('edit-overview').value.trim();
+            let newRating = document.getElementById('edit-rating').value.trim();
+            let newPosterUrl = document.getElementById('edit-poster-url').value.trim();
+             let newBackdropUrl = document.getElementById('edit-backdrop-url').value.trim();
+            let newTrailerId = document.getElementById('edit-trailer-id').value.trim();
+
+
+            if (!newTitle) {
+                alert('El título no puede estar vacío.');
+                return;
+            }
+            if (newYear && (!/^\d{4}$/.test(newYear))) {
+                alert('El año debe tener 4 dígitos o estar vacío.');
+                return;
+            }
+             if (newRating && (!/^[0-9]*(\.[0-9]+)?$/.test(newRating) || parseFloat(newRating) > 10)) {
+                 // Allow empty string, numbers with optional decimal part, not greater than 10
+                 if (newRating !== '' && (parseFloat(newRating) < 0 || parseFloat(newRating) > 10)) {
+                    alert('La clasificación debe ser un número entre 0 y 10 (ej: 7.5) o estar vacío.');
+                     return;
+                 }
+                 if (newRating !== '' && !/^[0-9]*(\.[0-9]+)?$/.test(newRating)) {
+                      alert('Formato de clasificación inválido. Usa solo números y un punto (ej: 7.5).');
+                      return;
+                 }
+            }
+
+
+            item.title = newTitle;
+            item.year = newYear || undefined;
+            item.overview = newOverview || undefined;
+            item.rating = newRating || undefined;
+            item.poster_url = newPosterUrl || undefined;
+            item.backdrop_url = newBackdropUrl || undefined; // Save backdrop URL
+            item.trailer_id = newTrailerId || undefined;
+
+
+             // Mark as manually edited for these fields by setting them explicitly.
+             // We can also mark the item as "_extraLoaded" to prevent TMDB enrichment from overwriting *any* field
+             // unless the saved value was explicitly `undefined`. The current structure handles this.
+             // Let's ensure that if a field is set here (even to empty string converted to undefined),
+             // the enricher doesn't touch it. The check `item.overview === undefined` already does this.
+            item._extraLoaded = true; // Assume if edited manually, we don't need TMDB enrichment for this item anymore
+
+
+            saveData(); // Save updated contentData
+            closeEditModal();
+            showContent(lastPanelMode); // Re-render the panel to show updated info
+        }
+
+        // MODAL SERVIDORES
+        function openServersModal(cardId) {
+            closeAllOptionsMenus(); // Close options menu before opening modal
+            let item = contentData.find(e=>e.id===cardId);
+            if (!item) return;
+            if (!item.servers) item.servers = [];
+            let html = `
+              <span class="close-modal" onclick="closeEditModal()">&times;</span>
+              <h2 style="margin-top:0; margin-bottom:14px; color: #f40612; font-size: 20px;">Servidores (${escapeHTML(item.title)})</h2>
+              <div class="edit-modal-label">Servidores disponibles:</div>
+              <ul class="edit-servers-list" id="edit-servers-list-${cardId}">
+                ${
+                   item.servers.length === 0
+                   ? `<li style="color:#aaa;font-size:15px;text-align:center;padding:10px;">Sin servidores</li>`
+                   : item.servers.map((srv, idx) => `
+                       <li class="edit-server-item" data-srvidx="${idx}">
+                         <button type="button" class="remove-server-btn" onclick="this.closest('.edit-server-item').remove()">X</button>
+                         <div class="edit-modal-label server-label">Nombre del servidor:</div>
+                         <input type="text" class="edit-server-input server-name" value="${escapeHTML(srv.name || '')}" placeholder="Ej: Servidor 1" required>
+
+                         <div class="edit-modal-label server-label">Idioma:</div>
+                         <input type="text" class="edit-server-input server-lang" value="${escapeHTML(srv.language || '')}" placeholder="Ej: Castellano">
+
+                         <div class="edit-modal-label server-label">URL del Video:</div>
+                         <input type="text" class="edit-server-input server-url" value="${escapeHTML(srv.url || '')}" placeholder="https://..." required>
+
+                         <div class="edit-modal-label server-label">Tipo de Enlace:</div>
+                         <select class="edit-server-select server-type">
+                            <option value="embed" ${srv.type === 'embed' ? 'selected' : ''}>Embed (iframe)</option>
+                            <option value="direct" ${srv.type === 'direct' ? 'selected' : ''}>Enlace Directo (JWPlayer)</option>
+                            <option value="other" ${srv.type === 'other' ? 'selected' : ''}>Otro (iframe)</option>
+                         </select>
+                       </li>
+                     `).join('')
+                 }
+              </ul>
+              <button class="add-server-btn" onclick="addServerInput('${cardId}')">Agregar Servidor</button>
+              <div class="edit-actions-bar">
+                  <button onclick="closeEditModal()" style="background:#2c2c2c;color:#fff;padding:8px 17px;border:none;border-radius:5px;font-size:15px;cursor:pointer;">Cancelar</button>
+                  <button onclick="saveServersModal('${cardId}')" style="background:#4CAF50;color:#fff;padding:8px 17px;border:none;border-radius:5px;font-size:15px;cursor:pointer;">Guardar</button>
+              </div>
+            `;
+            document.getElementById('edit-modal-content').innerHTML = html;
+            document.getElementById('edit-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function addServerInput(cardId) {
+            let ul = document.getElementById('edit-servers-list-' + cardId);
+             // If the "Sin servidores" placeholder exists, remove it
+             const placeholder = ul.querySelector('li > span');
+             if (placeholder && placeholder.textContent === 'Sin servidores') {
+                 ul.innerHTML = '';
+             }
+
+            let li = document.createElement('li');
+            li.className = "edit-server-item";
+             li.innerHTML = `
+                 <button type="button" class="remove-server-btn" onclick="this.closest('.edit-server-item').remove()">X</button>
+                 <div class="edit-modal-label server-label">Nombre del servidor:</div>
+                 <input type="text" class="edit-server-input server-name" value="" placeholder="Ej: Servidor 1" required>
+
+                 <div class="edit-modal-label server-label">Idioma:</div>
+                 <input type="text" class="edit-server-input server-lang" value="" placeholder="Ej: Castellano">
+
+                 <div class="edit-modal-label server-label">URL del Video:</div>
+                 <input type="text" class="edit-server-input server-url" value="" placeholder="https://..." required>
+
+                 <div class="edit-modal-label server-label">Tipo de Enlace:</div>
+                 <select class="edit-server-select server-type">
+                    <option value="embed">Embed (iframe)</option>
+                    <option value="direct">Enlace Directo (JWPlayer)</option>
+                    <option value="other">Otro (iframe)</option>
+                 </select>
+            `;
+            ul.appendChild(li);
+             // Focus the first input field of the new item
+             setTimeout(() => { li.querySelector('.edit-server-input').focus(); }, 50);
+
+        }
+
+        // removeServer is now only used internally by addServerInput HTML string
+        // function removeServer(cardId, btnElement) { /* ... removed ... */ }
+
+
+        function saveServersModal(cardId) {
+            let item = contentData.find(e=>e.id===cardId);
+            if (!item) return;
+            let ul = document.getElementById('edit-servers-list-' + cardId);
+            let serverItems = ul.querySelectorAll('.edit-server-item');
+            let newServers = [];
+            let validationError = false;
+
+            for(let li of serverItems) {
+                let name = li.querySelector('.server-name').value.trim();
+                let lang = li.querySelector('.server-lang').value.trim();
+                let url = li.querySelector('.server-url').value.trim();
+                let type = li.querySelector('.server-type').value;
+
+                 if (!name || !url) {
+                     alert('Nombre y URL son campos obligatorios para cada servidor.');
+                     validationError = true;
+                     // Highlight the invalid fields? For now, just alert.
+                     break; // Stop processing and do not save
+                 }
+
+
+                newServers.push({
+                    name: name,
+                    language: lang,
+                    url: url,
+                    type: type
+                });
+            }
+
+            if(validationError) {
+                return; // Don't save if there was a validation error
+            }
+
+            item.servers = newServers;
+            saveData(); // Save updated contentData
+            closeEditModal();
+            showContent(lastPanelMode); // Re-render the panel
+        }
+
+        // MODAL cierre por click fuera
+        window.addEventListener("click", function(event) {
+            let modals = [document.getElementById('tmdb-modal'), document.getElementById('edit-modal'), document.getElementById('player-modal')];
+            for (let modal of modals){
+                // Check if modal is open and click is directly on the modal background
+                if (modal && modal.style.display === 'flex' && event.target === modal) {
+                     if (modal.id === 'tmdb-modal') closeTmdbModal();
+                     else if (modal.id === 'edit-modal') closeEditModal();
+                     else if (modal.id === 'player-modal') closePlayerModal();
+                }
+            }
+        });
+
+        // Buscar en TMDB API: series o peliculas según modo
+        async function tmdbSearch() {
+            const input = document.getElementById('tmdb-searchinput').value.trim();
+            const resultList = document.getElementById('tmdb-resultlist');
+            const noResult = document.getElementById('tmdb-noresult');
+
+             const apiKey = config.tmdbApiKey;
+             if (!apiKey || apiKey === DEFAULT_TMDB_API_KEY) {
+                  // Check if apiKey is empty or just the default one
+                  if (!apiKey) {
+                     resultList.innerHTML = "";
+                     noResult.textContent = "Clave API de TMDB no configurada.";
+                     noResult.style.display = "block";
+                     return;
+                  }
+                  console.warn("Using default TMDB API key for search.");
+             }
+
+
+            resultList.innerHTML = "";
+            noResult.style.display = "none";
+            if (!input) {
+                noResult.textContent = "Ingresa el nombre de " + (tmdbModalSection === 'series' ? "una serie." : "una película.");
+                noResult.style.display = "block";
+                return;
+            }
+            resultList.innerHTML = `<li class='tmdb-search-result' style="justify-content:center;text-align:center;color:#bbb;">Buscando...</li>`;
+            let url, resultKind;
+            if (tmdbModalSection === "series") {
+                url = `https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&language=es-ES&query=${encodeURIComponent(input)}`;
+                resultKind = "tv";
+            } else {
+                url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=es-ES&query=${encodeURIComponent(input)}`;
+                resultKind = "movie";
+            }
+            try {
+                let response = await fetch(url);
+                if (!response.ok) {
+                     console.error(`TMDB search error: ${response.status}`, await response.text());
+                     // Check for specific API key invalid error (status 401)
+                     if (response.status === 401) {
+                         resultList.innerHTML = "";
+                         noResult.textContent = "Clave API de TMDB inválida. Revisa la Configuración.";
+                         noResult.style.display = "block";
+                         return;
+                     }
+                     throw new Error(`HTTP error! status: ${response.status}`);
+                 }
+                let data = await response.json();
+
+                if (!data.results || data.results.length === 0) {
+                    resultList.innerHTML = "";
+                    noResult.textContent = "No encontrado.";
+                    noResult.style.display = "block";
+                    return;
+                }
+                // Show top 12 results
+                resultList.innerHTML = data.results.slice(0, 12).map((item) => {
+                    let id = item.id;
+                    let title = tmdbModalSection === 'series' ? (item.name || "") : (item.title || "");
+                    let date = (tmdbModalSection === 'series' ? item.first_air_date : item.release_date) || "";
+                    let year = date ? date.substring(0,4) : "";
+                    let posterPath = item.poster_path ? (TMDB_IMAGE_URL + item.poster_path) : "";
+                    // Check if item with this tmdb_id AND type already exists in contentData
+                    let alreadyAdded = contentData.some(cd =>
+                        (cd.tmdb_id && String(cd.tmdb_id) === String(id)) // Ensure comparison is robust
+                        && (cd.type === (tmdbModalSection === "series" ? "series" : "movie"))
+                    );
+                    let disabled = alreadyAdded ? "disabled" : "";
+                    let btnText = alreadyAdded ? "Agregada" : ("Agregar " + (tmdbModalSection === "series" ? "Serie" : "Película"));
+
+                    // Pass item as string, escape single quotes within the JSON string using HTML entity
+                    const escapedItemJson = JSON.stringify(item)
+                                               .replace(/'/g, "&#039;");
+
+
+                    return `
+                      <li class="tmdb-search-result">
+                        ${posterPath ? `<img class="tmdb-search-result-image" src="${escapeHTML(posterPath)}" alt="">` : `<div class="tmdb-search-result-image"></div>`}
+                        <div class="tmdb-search-info-block">
+                          <span class="tmdb-search-info-title">${escapeHTML(title)}</span>
+                          ${year ? `<span class="tmdb-search-info-date">(${escapeHTML(year)})</span>` : ""}
+                        </div>
+                        <button class="tmdb-search-addbtn"
+                            ${disabled}
+                            onclick='addTmdbFoundItem(${escapedItemJson}, "${tmdbModalSection}")'>${btnText}</button>
+                      </li>
+                    `;
+                }).join('');
+            } catch (e) {
+                console.error("Error searching TMDB:", e);
+                resultList.innerHTML = "";
+                noResult.textContent = "Error buscando. Verifica la clave API en Configuración.";
+                noResult.style.display = "block";
+            }
+        }
+
+        // Agrega serie o película seleccionada
+        function addTmdbFoundItem(tmdbItem, tipo) {
+            let id = tmdbItem.id;
+             // Check if item already exists
+            if (contentData.some(cd => isSameItem(cd, tmdbItem.id, tipo))) {
+                return;
+             }
+             // Generate a simpler, stable short code for the item
+             const shortCode = generateShortCode();
+             const itemObj = {
+                 id: shortCode, // New, stable short, human-readable code
+                 tmdb_id: tmdbItem.id, // keep TMDB ID for reference
+                 type: tipo === "series" ? "series" : "movie",
+                 poster_url: tmdbItem.poster_path ? TMDB_IMAGE_URL + tmdbItem.poster_path : undefined,
+                 backdrop_url: tmdbItem.backdrop_path ? TMDB_BACKDROP_URL + tmdbItem.backdrop_path : undefined,
+                 year: (tipo === "series"
+                     ? (tmdbItem.first_air_date ? tmdbItem.first_air_date.substring(0,4) : undefined)
+                     : (tmdbItem.release_date ? tmdbItem.release_date.substring(0,4) : undefined)
+                 ),
+                 servers: [], // Initialize servers as an empty array of objects
+                 // Keep these undefined initially so enrichCardDetails fetches them from TMDB details
+                 overview: undefined,
+                 rating: undefined,
+                 genres: undefined,
+                 trailer_id: undefined, // Will be fetched by enrichCardDetails
+                 runtime: undefined, // Will be fetched by enrichCardDetails
+                 language: undefined, // Will be fetched by enrichCardDetails (original/spoken)
+                 countries: undefined, // Will be fetched by enrichCardDetails (production countries)
+
+                 _extraLoaded: false // Mark as not yet enriched
+             };
+             contentData.push(itemObj);
+
+             saveData(); // Save newly added item
+
+             // Refresh the TMDB search results to disable the added item button
+             tmdbSearch();
+
+             // Refresh the main panel view
+             showContent(lastPanelMode); // This will also trigger enrichCardDetails for the new item
+        }
+
+        // Helper to generate a short, readable code like 'AB123'
+        function generateShortCode() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ'.split('');
+            let code;
+            do {
+                code = '';
+                // First 2 characters are letters
+                for (let i = 0; i < 2; i++) {
+                    code += chars[Math.floor(Math.random() * chars.length)];
+                }
+                // Then 3 numbers
+                for (let i = 0; i < 3; i++) {
+                    code += Math.floor(Math.random() * 10);
+                }
+            } while (contentData.some(item => item.id === code)); // Ensure code is unique
+            return code;
+        }
+
+        // Helper to check if item with same TMDB id and type exists
+        function isSameItem(item, tmdbId, type) {
+            return String(item.tmdb_id) === String(tmdbId) && item.type === (type === "series" ? "series" : "movie");
+        }
+
+        // Eliminar contenido
+        function deleteContent(cardId) {
+            if (!confirm("¿Seguro que deseas eliminar?")) return;
+            let idx = contentData.findIndex(e=>e.id===cardId);
+            if (idx !== -1) {
+                contentData.splice(idx, 1);
+                saveData(); // Save after deletion
+                showContent(lastPanelMode); // Re-render the current view
+                closeAllOptionsMenus();
+            }
+        }
+
+        // Permite buscar con Enter o click en botón (TMDB Modal)
+        function tmdbSetupEvents() {
+            const searchInput = document.getElementById('tmdb-searchinput');
+            const searchBtn = document.getElementById('tmdb-search-btn');
+
+            // Add listeners only once if they don't exist
+             if (searchInput && !searchInput._hasListeners) {
+                 searchInput.addEventListener('keydown', function(e){
+                    if (e.key === 'Enter') tmdbSearch();
+                 });
+                 searchInput._hasListeners = true; // Mark as having listeners
+             }
+
+             if (searchBtn && !searchBtn._hasListeners) {
+                 searchBtn.addEventListener('click', tmdbSearch);
+                 searchBtn._hasListeners = true; // Mark as having listeners
+             }
+        }
+
+        // ---- PLAYER MODAL LOGIC ----
+        let currentPlayingItemId = null; // Track which item is currently in the player modal
+
+        async function openPlayerModal(cardId) {
+             closeAllOptionsMenus(); // Close options menu first
+
+             const item = contentData.find(e => e.id === cardId);
+             if (!item) return;
+
+             currentPlayingItemId = cardId; // Set the currently playing item ID
+
+             const modal = document.getElementById('player-modal');
+             const header = document.getElementById('player-header');
+             const posterEl = document.querySelector('#player-poster img');
+             const titleEl = document.getElementById('player-title');
+             const overviewEl = document.getElementById('player-overview');
+             const ratingEl = document.getElementById('player-rating');
+             const yearEl = document.getElementById('player-year');
+             const genresEl = document.getElementById('player-genres');
+             const runtimeEl = document.getElementById('player-runtime');
+             const runtimeLiEl = document.getElementById('player-runtime-li');
+             const languageEl = document.getElementById('player-language');
+             const languageLiEl = document.getElementById('player-lang-li');
+             const moreDataEl = document.getElementById('player-more-data');
+             const trailerBtn = document.getElementById('trailer-btn');
+             const serverButtonsContainer = document.getElementById('player-server-buttons-container');
+             const noServersMessageElem = serverButtonsContainer.querySelector('#no-servers-message');
+             const shareBtn = document.getElementById('player-share-btn');
+
+
+             // Reset/clear previous content
+             titleEl.textContent = item.title || 'Sin título';
+             posterEl.src = item.poster_url || '';
+             posterEl.alt = item.title || '';
+             header.style.setProperty('--bg-image', `url('${escapeHTML(item.backdrop_url || item.poster_url || '')}')`); // Use backdrop or poster as background
+
+             overviewEl.textContent = item.overview !== undefined ? item.overview : (item.tmdb_id ? 'Cargando sinopsis...' : 'Sin sinopsis');
+             ratingEl.textContent = item.rating !== undefined ? (item.rating ? `★ ${item.rating}` : '') : (item.tmdb_id ? 'Cargando...' : ''); // Handle rating display
+             yearEl.textContent = item.year || '';
+             genresEl.textContent = item.genres || '';
+             runtimeEl.textContent = ''; runtimeLiEl.style.display = 'none';
+             languageEl.textContent = ''; languageLiEl.style.display = 'none';
+             moreDataEl.innerHTML = ''; // Clear extra tags
+             trailerBtn.style.display = 'none'; // Hide trailer button initially
+
+             // Attempt to enrich details if not already loaded
+             if (item.tmdb_id && !item._extraLoaded) {
+                  const details = await fetchTmdbDetails(item.tmdb_id, item.type);
+                  if (details) {
+                      // Update UI fields with fetched data if they are still showing placeholders or were undefined
+                      if (item.overview === undefined && details.overview !== undefined) overviewEl.textContent = details.overview;
+                      if (item.rating === undefined && details.vote_average !== undefined) ratingEl.textContent = details.vote_average ? details.vote_average.toFixed(1) : '';
+                      if (item.year === undefined && (item.type === 'series' ? details.first_air_date : details.release_date)) yearEl.textContent = (item.type === 'series' ? details.first_air_date : details.release_date).substring(0, 4);
+                      if (item.genres === undefined && details.genres !== undefined) genresEl.textContent = (details.genres && details.genres.map(g=>g.name).join(", ")) || "";
+                      if (item.poster_url === undefined && details.poster_path) posterEl.src = TMDB_IMAGE_URL + details.poster_path;
+                      if (item.backdrop_url === undefined && details.backdrop_path) header.style.setProperty('--bg-image', `url('${TMDB_BACKDROP_URL + details.backdrop_path}')`);
+
+                       // Update item data object with fetched details if they were undefined
+                       if (item.overview === undefined && details.overview !== undefined) item.overview = details.overview;
+                       if (item.rating === undefined && details.vote_average !== undefined) item.rating = details.vote_average ? details.vote_average.toFixed(1) : '';
+                       if (item.year === undefined && (item.type === 'series' ? details.first_air_date : details.release_date)) item.year = (item.type === 'series' ? details.first_air_date : details.release_date).substring(0, 4);
+                       if (item.genres === undefined && details.genres !== undefined) item.genres = (details.genres && details.genres.map(g=>g.name).join(", ")) || "";
+                       if (item.poster_url === undefined && details.poster_path) item.poster_url = TMDB_IMAGE_URL + details.poster_path;
+                       if (item.backdrop_url === undefined && details.backdrop_path) item.backdrop_url = TMDB_BACKDROP_URL + details.backdrop_path;
+
+                       // Runtime
+                       const runtime = details.runtime || (details.episode_run_time ? details.episode_run_time[0] : undefined);
+                       if (item.runtime === undefined && runtime !== undefined) { item.runtime = runtime; }
+                       if (item.runtime) { runtimeEl.textContent = item.runtime + 'm'; runtimeLiEl.style.display = ''; } else { runtimeLiEl.style.display = 'none'; }
+
+                       // Language
+                       const language = details.spoken_languages && details.spoken_languages.length > 0 ? details.spoken_languages[0].english_name : undefined;
+                       if (item.language === undefined && language !== undefined) { item.language = language; }
+                       if (item.language) { languageEl.textContent = item.language; languageLiEl.style.display = ''; } else { languageLiEl.style.display = 'none'; }
+
+                        // Production Countries (as "more data" tag)
+                       const countries = details.production_countries && details.production_countries.length > 0 ? details.production_countries.map(c => c.name).join(", ") : undefined;
+                        if (item.countries === undefined && countries !== undefined) { item.countries = countries; }
+                        if (item.countries) { moreDataEl.innerHTML += `<span><i class="fas fa-globe"></i> ${escapeHTML(item.countries)}</span>`; }
+
+                       // Add other "more data" tags if needed (e.g., production companies, status, etc.)
+
+                       // Trailer
+                       const trailer = details.videos && details.videos.results ? details.videos.results.find(v => v.site === 'YouTube' && v.type === 'Trailer') : undefined;
+                       if (item.trailer_id === undefined && trailer) { item.trailer_id = trailer.key; } // Save fetched trailer ID
+                       if (item.trailer_id) { trailerBtn.style.display = 'inline-block'; }
+
+                       item._extraLoaded = true; // Mark as loaded/enriched
+                       saveData(); // Save updated data
+                  } else {
+                       // If fetching failed, clear placeholders or set explicit "N/A"
+                       overviewEl.textContent = item.overview || 'Sin sinopsis';
+                       ratingEl.textContent = item.rating ? `★ ${item.rating}` : '';
+                       yearEl.textContent = item.year || '';
+                       genresEl.textContent = item.genres || '';
+                       if (item.runtime) { runtimeEl.textContent = item.runtime + 'm'; runtimeLiEl.style.display = ''; } else { runtimeLiEl.style.display = 'none'; }
+                       if (item.language) { languageEl.textContent = item.language; languageLiEl.style.display = ''; } else { languageLiEl.style.display = 'none'; }
+                       if (item.countries) { moreDataEl.innerHTML += `<span><i class="fas fa-globe"></i> ${escapeHTML(item.countries)}</span>`; }
+                       if (item.trailer_id) { trailerBtn.style.display = 'inline-block'; }
+                       item._extraLoaded = true; // Mark as attempted
+                  }
+             } else {
+                 // Item was already enriched or manually edited, just display current data
+                 overviewEl.textContent = item.overview || 'Sin sinopsis';
+                 ratingEl.textContent = item.rating ? `★ ${item.rating}` : '';
+                 yearEl.textContent = item.year || '';
+                 genresEl.textContent = item.genres || '';
+                 if (item.runtime) { runtimeEl.textContent = item.runtime + 'm'; runtimeLiEl.style.display = ''; } else { runtimeLiEl.style.display = 'none'; }
+                 if (item.language) { languageEl.textContent = item.language; languageLiEl.style.display = ''; } else { languageLiEl.style.display = 'none'; }
+                 if (item.countries) { moreDataEl.innerHTML += `<span><i class="fas fa-globe"></i> ${escapeHTML(item.countries)}</span>`; }
+                 if (item.trailer_id) { trailerBtn.style.display = 'inline-block'; }
+             }
+
+
+             // Populate server buttons (reset section including no-servers notice)
+             serverButtonsContainer.innerHTML = `
+                 <h4><i class="fas fa-server"></i> Servidores disponibles:</h4>
+                 <div id="no-servers-message" class="no-servers-message" style="display:none;">No hay servidores agregados.</div>
+             `;
+             if (!item.servers || item.servers.length === 0) {
+                 noServersMessageElem.style.display = 'block';
+             } else {
+                 noServersMessageElem.style.display = 'none';
+                 item.servers.forEach((srv, index) => {
+                     const button = document.createElement('button');
+                     button.className = 'servidor-btn';
+                     button.onclick = () => cambiarServidor(cardId, index, button);
+                     button.innerHTML = `<span class="server-name">${escapeHTML(srv.name || 'Servidor')}</span>` +
+                                        (srv.language ? `<span class="server-lang">(${escapeHTML(srv.language)})</span>` : '');
+                     serverButtonsContainer.appendChild(button);
+                 });
+                 const firstButton = serverButtonsContainer.querySelector('.servidor-btn');
+                 if (firstButton) cambiarServidor(cardId, 0, firstButton);
+             }
+
+
+             // Show the modal
+             modal.style.display = 'flex';
+             document.body.style.overflow = 'hidden'; // Prevent background scroll
+        }
+
+        function closePlayerModal() {
+             const modal = document.getElementById('player-modal');
+             // Stop any active playback
+             if (jwPlayerInstance) {
+                 jwPlayerInstance.stop(); // Stop JWPlayer playback
+                 // Keep JWPlayer instance for potential reuse, don't remove it immediately
+                 // jwPlayerInstance.remove(); // Clean up the player instance
+                 // jwPlayerInstance = null; // Reset the instance variable
+                 // Recreate the JWPlayer container div for the next time it's opened
+                 // const jwWrapper = document.getElementById('player-jw-container-wrapper');
+                 //  if (jwWrapper) {
+                 //      jwWrapper.innerHTML = '<div id="player-jw-container"></div>';
+                 //  }
+             }
+             // Clear iframe sources
+             document.getElementById('player-iframe').src = '';
+             document.getElementById('player-trailer-iframe').src = '';
+
+
+             // Hide all player containers
+            document.getElementById('player-jw-container-wrapper').classList.remove('active');
+            document.getElementById('player-iframe-container').classList.remove('active');
+            document.getElementById('player-trailer-container').classList.remove('active');
+
+
+             // Hide the modal
+             modal.style.display = 'none';
+             document.body.style.overflow = ''; // Restore scroll
+             currentPlayingItemId = null; // Clear the playing item ID
+        }
+
+        // Function to show the trailer instead of the main player
+        function showTrailer() {
+             const item = contentData.find(e => e.id === currentPlayingItemId);
+             if (!item || !item.trailer_id) return;
+
+             // Hide all main player containers
+             document.getElementById('player-jw-container-wrapper').classList.remove('active');
+             document.getElementById('player-iframe-container').classList.remove('active');
+             // Stop current playback
+             if (jwPlayerInstance) {
+                 jwPlayerInstance.stop();
+             }
+             document.getElementById('player-iframe').src = '';
+
+             // Show and load the trailer iframe
+             const trailerContainer = document.getElementById('player-trailer-container');
+             const trailerIframe = document.getElementById('player-trailer-iframe');
+             trailerIframe.src = `https://www.youtube.com/embed/${escapeHTML(item.trailer_id)}?autoplay=1`; // YouTube embed URL
+             trailerContainer.classList.add('active');
+
+             // Optional: Deactivate all server buttons visually
+             document.querySelectorAll('.servidor-btn').forEach(btn => btn.classList.remove('active'));
+
+             console.log(`Playing trailer for: ${item.title}`);
+        }
+
+
+        function cambiarServidor(cardId, serverIndex, clickedButton) {
+             const item = contentData.find(e => e.id === cardId);
+             if (!item || !item.servers || serverIndex >= item.servers.length) {
+                 console.error("Server data not found.");
+                 return;
+             }
+             const serverData = item.servers[serverIndex];
+
+             // Hide all player containers
+             const jwWrapper = document.getElementById('player-jw-container-wrapper');
+             const iframeContainer = document.getElementById('player-iframe-container');
+             const trailerContainer = document.getElementById('player-trailer-container');
+
+             jwWrapper.classList.remove('active');
+             iframeContainer.classList.remove('active');
+             trailerContainer.classList.remove('active');
+
+
+             // Stop any active playback (JWPlayer) or clear iframe sources
+             if (jwPlayerInstance) {
+                 jwPlayerInstance.stop(); // Stop JWPlayer playback
+                 // Do NOT remove the JWPlayer instance here, just stop it.
+             }
+             document.getElementById('player-iframe').src = '';
+             document.getElementById('player-trailer-iframe').src = '';
+
+
+             // Activate the correct player container and load the source
+             if (serverData.type === 'direct') {
+                 jwWrapper.classList.add('active');
+                 initJWPlayer(serverData.url); // Pass the video URL
+                 console.log(`Playing direct link server: ${serverData.name || 'Unnamed'} (${serverData.url})`);
+             } else if (serverData.type === 'embed' || serverData.type === 'other') {
+                 iframeContainer.classList.add('active');
+                 document.getElementById('player-iframe').src = serverData.url;
+                 console.log(`Playing embed server: ${serverData.name || 'Unnamed'} (${serverData.url})`);
+             } else {
+                  console.warn(`Unknown server type: ${serverData.type}`);
+                  // Maybe default to iframe or show an error message
+                  iframeContainer.classList.add('active'); // Fallback to iframe
+                  document.getElementById('player-iframe').src = serverData.url; // Still attempt to load URL
+             }
+
+
+             // Update active button style
+             document.querySelectorAll('#player-server-buttons-container .servidor-btn').forEach(btn => {
+                 btn.classList.remove('active');
+             });
+             if (clickedButton) {
+                  clickedButton.classList.add('active');
+             }
+        }
+
+        // Inicializar JWPlayer
+        function initJWPlayer(videoUrl) {
+            const jwContainerDiv = document.getElementById('player-jw-container');
+            if (!jwContainerDiv) {
+                 console.error("JWPlayer container div not found!");
+                 return;
+            }
+
+            if (!jwPlayerInstance || jwPlayerInstance.getState() === 'destroyed') {
+                 // If instance doesn't exist or was destroyed, create a new one
+                jwPlayerInstance = jwplayer("player-jw-container").setup({
+                    sources: [{ file: videoUrl, label: "Auto" }], // Assume single source URL for simplicity
+                    aspectratio: "16:9",
+                    width: "100%",
+                    height: "100%",
+                    autostart: true,
+                    // image: "PATH_TO_POSTER_IMAGE", // Optional poster image
+                    skin: {
+                        name: "bekle" // If you have a custom skin named "bekle"
+                    },
+                    displaytitle: false, // Hide title in player
+                    displaydescription: false, // Hide description
+                    abouttext: 'Entretenimiento', // Optional: Your app name
+                    aboutlink: window.location.href, // Optional: Link to your app
+                    controls: true // Ensure controls are visible
+                });
+
+                jwPlayerInstance.on('error', function(e) {
+                    console.error("JWPlayer Error:", e);
+                     alert('Error al cargar este video. Intenta con otro servidor.');
+                     // Optional: Auto-switch to the next server
+                     const activeBtn = document.querySelector('#player-server-buttons-container .servidor-btn.active');
+                     const nextBtn = activeBtn ? activeBtn.nextElementSibling : null;
+                     if(nextBtn && nextBtn.classList.contains('servidor-btn')) { // Ensure it's actually a server button
+                          const nextCardId = currentPlayingItemId; // Need card ID for next call
+                          // Find the index of the next button relative to ALL server buttons
+                          const serverButtons = document.querySelectorAll('#player-server-buttons-container .servidor-btn');
+                          let nextServerIndex = -1;
+                          serverButtons.forEach((btn, idx) => {
+                               if (btn === nextBtn) nextServerIndex = idx;
+                          });
+
+                          if (nextCardId && nextServerIndex !== -1) {
+                               cambiarServidor(nextCardId, nextServerIndex, nextBtn);
+                          }
+                     } else {
+                         // No more servers or next element is not a server button, close modal
+                         closePlayerModal();
+                     }
+                });
+
+                 // Add basic event listeners for logging/debugging
+                 jwPlayerInstance.on('ready', () => console.log("JWPlayer Ready"));
+                 jwPlayerInstance.on('play', () => console.log("JWPlayer Play"));
+                 jwPlayerInstance.on('pause', () => console.log("JWPlayer Pause"));
+                 jwPlayerInstance.on('complete', () => console.log("JWPlayer Complete"));
+
+            } else {
+                 // If instance already exists and is not destroyed, just load the new source and play
+                jwPlayerInstance.load([{ file: videoUrl, label: "Auto" }]);
+                jwPlayerInstance.play();
+            }
+        }
+
+
+        // Inicializar vista
+        window.onload = () => {
+            // First, check for embed mode from query parameter
+            if (isEmbedMode()) {
+                const code = getEmbedCode();
+                // This is a self-contained view, so we run this and stop.
+                (async () => {
+                    loadConfig(); // embed view needs config for api key for enrichment
+                    loadData();   // embed view needs data to find the item
+                    await renderEmbedView(code);
+                })();
+                return; // Stop execution for the normal app
+            }
+            
+            // --- If not embed mode, proceed with normal app initialization ---
+            loadData(); // Load existing data
+            loadConfig(); // Load configuration
+
+            // Ensure the 'Inicio' button exists before trying to select it
+            const initialButton = document.querySelector('.nav-button[onclick*="showContent(\'all\'"]');
+            if (initialButton) {
+                showContent('all', { target: initialButton });
+            } else {
+                // Fallback if 'Inicio' button isn't found
+                showContent('all', null);
+            }
+
+            tmdbSetupEvents(); // Setup TMDB search events
+        };
+
+        // Cerrar modals si Escape
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Prioritize closing modals, then options menu
+                const playerModal = document.getElementById('player-modal');
+                const editModal = document.getElementById('edit-modal');
+                const tmdbModal = document.getElementById('tmdb-modal');
+
+
+                if (playerModal && playerModal.style.display === 'flex') {
+                    closePlayerModal();
+                } else if (editModal && editModal.style.display === 'flex') {
+                    closeEditModal();
+                } else if (tmdbModal && tmdbModal.style.display === 'flex') {
+                    closeTmdbModal();
+                } else if (openOptionsMenuId) {
+                     // Close options menu if Escape is pressed and a menu is open
+                     closeAllOptionsMenus();
+                }
+            }
+        });
+
+         // Close options menu if click outside (event delegation)
+         window.addEventListener('click', function(event) {
+             // Check if a menu is open
+             if (openOptionsMenuId) {
+                 const openMenu = document.getElementById('optionsmenu_' + openOptionsMenuId);
+                 const optionsButton = document.querySelector(`.content-options-btn[data-cardid="${openOptionsMenuId}"]`);
+
+                 // If the click is outside the currently open menu AND outside its corresponding button
+                 if (openMenu && !openMenu.contains(event.target) &&
+                     optionsButton && !optionsButton.contains(event.target) ) {
+                        closeAllOptionsMenus();
+                 }
+             }
+         });
+
+
+        // ---- NEW FUNCTIONS FOR SHARING AND DEEP LINKING ----
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = 'toast-message';
+            if (type === 'error') {
+                toast.classList.add('error');
+            }
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            // Show the toast
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+
+            // Hide and remove the toast after a few seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                toast.addEventListener('transitionend', () => {
+                    toast.remove();
+                }, { once: true });
+            }, 3000);
+        }
+
+        function copyShareLink(cardId) {
+            // Generate the embed link using full URL + ?embed=CODE
+            const baseUrl = window.location.origin + window.location.pathname;
+            const embedLink = `${baseUrl}?embed=${encodeURIComponent(cardId)}`;
+            navigator.clipboard.writeText(embedLink).then(() => {
+                showToast('Enlace copiado: ' + embedLink);
+                closeAllOptionsMenus();
+            }).catch(err => {
+                console.error('Failed to copy link:', err);
+                showToast('No se pudo copiar el link.', 'error');
+            });
+        }
+
+        // Handle deep links on hash change and on page load
+        function handleDeepLink() {
+            const hash = window.location.hash;
+            let code = null;
+            if (hash.startsWith('#/')) {
+                code = hash.substring(2);
+            } else if (hash.startsWith('#') && hash.length > 1) {
+                code = hash.substring(1);
+            }
+            if (code) {
+                // Lookup item by id (short code)
+                const item = contentData.find(i => i.id === code);
+
+                if (item) {
+                    openPlayerModal(item.id);
+                } else {
+                    console.warn(`Deep link item with ID "${code}" not found.`);
+                    showToast(`Contenido con ID "${code}" no encontrado.`, 'error');
+                }
+            }
+        }
+
+        window.addEventListener('hashchange', handleDeepLink);
+
+        // ---- EMBED VIEW IMPLEMENTATION ----
+        function isEmbedMode() {
+            // Check if ?embed=CODE or &embed=CODE in URL
+            const params = new URLSearchParams(window.location.search);
+            return params.get('embed');
+        }
+
+        function getEmbedCode() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('embed');
+        }
+
+        // Render the "embed" standalone minimal view for a given code
+        async function renderEmbedView(code) {
+            const item = contentData.find(i => i.id === code);
+
+            if (!item) {
+                document.body.innerHTML = `<div style="font-family: Arial, sans-serif; color:#fff;background:#111;padding:40px 30px;border-radius:9px;font-size:20px; text-align:center; margin: 50px;">👀 Contenido no encontrado para el código <strong>${escapeHTML(code)}</strong></div>`;
+                return;
+            }
+
+            // Enrich item data if it hasn't been fully loaded yet.
+            if (item.tmdb_id && !item._extraLoaded) {
+                const details = await fetchTmdbDetails(item.tmdb_id, item.type);
+                if (details) {
+                    if (item.overview === undefined && details.overview !== undefined) item.overview = (details.overview || "").trim();
+                    if (item.genres === undefined && details.genres !== undefined) item.genres = (details.genres && details.genres.map(g=>g.name).join(", ")) || "";
+                    if (item.rating === undefined && details.vote_average !== undefined) item.rating = details.vote_average ? (details.vote_average.toFixed(1)) : "";
+                    if (item.poster_url === undefined && details.poster_path) item.poster_url = TMDB_IMAGE_URL + details.poster_path;
+                    if (item.year === undefined && (item.type === 'series' ? details.first_air_date : details.release_date)) {
+                        item.year = (item.type === 'series' ? details.first_air_date : details.release_date).substring(0, 4);
+                    }
+                    if (item.backdrop_url === undefined && details.backdrop_path) item.backdrop_url = TMDB_BACKDROP_URL + details.backdrop_path;
+                    const runtime = details.runtime || (details.episode_run_time ? details.episode_run_time[0] : undefined);
+                    if (item.runtime === undefined && runtime !== undefined) item.runtime = runtime;
+                    const language = details.spoken_languages && details.spoken_languages.length > 0 ? details.spoken_languages[0].english_name : undefined;
+                    if (item.language === undefined && language !== undefined) item.language = language;
+                    const countries = details.production_countries && details.production_countries.length > 0 ? details.production_countries.map(c => c.name).join(", ") : undefined;
+                    if (item.countries === undefined && countries !== undefined) item.countries = countries;
+                }
+            }
+
+            const title = escapeHTML(item.title || "Sin título");
+            const backdropUrl = escapeHTML(item.backdrop_url || "");
+            const posterUrl = escapeHTML(item.poster_url || "");
+            const ratingText = item.rating ? `${escapeHTML(item.rating)}/10` : 'N/A';
+            const runtimeText = item.runtime ? `${Math.floor(item.runtime / 60)}h ${item.runtime % 60}m` : '';
+            const year = escapeHTML(item.year || '');
+            const language = escapeHTML(item.language || '');
+            const overview = escapeHTML(item.overview || 'Sin sinopsis.');
+            const genres = escapeHTML(item.genres || '');
+            const countries = escapeHTML(item.countries || '');
+
+            const serversAvailable = item.servers && item.servers.length > 0;
+
+            let serverButtonsHtml = '';
+            if (serversAvailable) {
+                serverButtonsHtml = item.servers.map((srv, index) => {
+                    const activeClass = index === 0 ? 'active' : '';
+                    const icon = srv.type === 'direct' ? 'fa-play-circle' : 'fa-external-link-alt';
+                    return `<button class="servidor-btn ${activeClass}" onclick="cambiarServidor(${index}, this)"><i class="fas ${icon}"></i> ${escapeHTML(srv.name)} ${srv.language ? `(${escapeHTML(srv.language)})` : ''}</button>`;
+                }).join('\n');
+            } else {
+                serverButtonsHtml = '<p style="text-align:center; color: #ff8a8a;">No hay servidores disponibles.</p>';
+            }
+
+            let playerContainersHtml = '';
+            if(serversAvailable) {
+                playerContainersHtml = item.servers.map((srv, index) => {
+                    const hiddenClass = index === 0 ? '' : 'hidden';
+                    if (srv.type === 'direct') {
+                        return `<div class="player-container ${hiddenClass}" data-player-index="${index}"><div id="jwplayer-container-${index}"></div></div>`;
+                    } else {
+                        const initialSrc = index === 0 ? `src="${escapeHTML(srv.url)}"` : 'src=""';
+                        return `<div class="player-container ${hiddenClass}" data-player-index="${index}"><iframe ${initialSrc} allowfullscreen></iframe></div>`;
+                    }
+                }).join('\n');
+            }
+
+            const serversJson = JSON.stringify(item.servers || []);
+
+            const newHtml = `
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>${title} - Reproductor</title>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                <script src="https://ssl.p.jwpcdn.com/player/v/8.18.4/jwplayer.js"><\/script>
+                <script type="text/javascript">jwplayer.key = "W7zSm81+mmIsg7F+fyHRKhF3ggLkTqtGMhvI92kbqf/ysE99";<\/script>
+                <style>
+                    :root { --primary-color: #01b4e4; --secondary-color: #032541; --accent-color: #e50914; --text-color: #ffffff; --bg-gradient: linear-gradient(to right, #000, #333, #222); }
+                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: var(--text-color); margin: 0; padding: 0; }
+                    .post-header { position: relative; padding: 30px; display: flex; flex-wrap: wrap; gap: 30px; align-items: flex-end; min-height: 50vh; margin-bottom: 20px; z-index: 1; }
+                    .post-header::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(18, 18, 18, 1)), url('${backdropUrl}'); background-size: cover; background-position: center top; background-repeat: no-repeat; z-index: -1; }
+                    .poster-img { width: 100%; border-radius: 10px; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); transition: transform 0.3s ease; display: block; }
+                    .image-container { width: 250px; flex-shrink: 0; }
+                    .post-header__info { flex: 1; min-width: 300px; }
+                    .post-header__info h1 { font-size: 2.5rem; margin: 0 0 15px 0; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); }
+                    .post-header__info ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
+                    .post-header__info ul li { display: inline-flex; align-items: center; gap: 5px; }
+                    .resume { font-size: 1.1rem; line-height: 1.6; max-width: 800px; }
+                    .more-data { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 15px; }
+                    .more-data p { margin: 5px 0; background: rgba(255, 255, 255, 0.1); padding: 8px 15px; border-radius: 20px; font-size: 0.9rem; }
+                    
+                    .player-section { display: flex; flex-direction: row-reverse; flex-wrap: wrap; gap: 20px; padding: 0 30px 30px 30px; max-width: 1400px; margin: auto; }
+                    .servidores-container { flex: 1; min-width: 280px; max-width: 350px; background: #1a1a1a; padding: 20px; border-radius: 10px; max-height: 70vh; overflow-y: auto; }
+                    .reproductor-container { flex: 3; min-width: 300px; }
+                    
+                    .player-container { width: 100%; height: 0; padding-bottom: 56.25%; position: relative; background: #000; border-radius: 10px; overflow:hidden; }
+                    .player-container > div, .player-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+                    .player-container.hidden { display: none; }
+                    
+                    .servidor-btn { width: 100%; padding: 10px 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #444; border-radius: 8px; color: var(--text-color); cursor: pointer; transition: all 0.3s ease; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; margin-bottom: 10px; box-sizing: border-box; text-align: left; }
+                    .servidor-btn i { font-size: 1.2rem; color: var(--primary-color); margin-right: 5px; }
+                    .servidor-btn:hover { background: rgba(1, 180, 228, 0.2); border-color: var(--primary-color); }
+                    .servidor-btn.active { background: var(--primary-color); color: #000; font-weight: bold; border-color: var(--primary-color); }
+                    .servidor-btn.active i { color: #000; }
+
+                    @media (max-width: 900px) {
+                        .player-section { flex-direction: column; }
+                        .servidores-container { max-width: 100%; max-height: 300px; }
+                    }
+                    @media (max-width: 768px) {
+                        .post-header { padding: 20px; min-height: auto; flex-direction: column; align-items: center; text-align: center; }
+                        .image-container { width: 200px; }
+                        .post-header__info h1 { font-size: 1.8rem; }
+                        .player-section { padding: 0 15px 15px 15px; }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="post-header">
+                    <div class="image-container">
+                        <img src="${posterUrl}" class="poster-img" alt="${title}" loading="lazy">
+                    </div>
+                    <div class="post-header__info">
+                        <h1>${title}</h1>
+                        <ul>
+                            ${ratingText !== 'N/A' ? `<li><i class="fas fa-star"></i> ${ratingText}</li>` : ''}
+                            ${runtimeText ? `<li><i class="fas fa-clock"></i> ${runtimeText}</li>` : ''}
+                            ${year ? `<li><i class="fas fa-calendar-alt"></i> ${year}</li>` : ''}
+                            ${language ? `<li><i class="fas fa-closed-captioning"></i> ${language}</li>` : ''}
+                        </ul>
+                        <p class="resume">${overview}</p>
+                        <div class="more-data">
+                            ${genres ? `<p><i class="fas fa-film"></i> ${genres}</p>` : ''}
+                            ${countries ? `<p><i class="fas fa-globe"></i> ${countries}</p>` : ''}
+                        </div>
+                    </div>
+                </div>
+
+                ${serversAvailable ? `
+                <div class="player-section">
+                     <div class="reproductor-container">
+                        ${playerContainersHtml}
+                    </div>
+                    <div class="servidores-container">
+                        <h4 style="color: var(--primary-color); margin-bottom: 15px;"><i class="fas fa-server"></i> Servidores disponibles:</h4>
+                        ${serverButtonsHtml}
+                    </div>
+                </div>
+                ` : `
+                <div style="text-align:center; padding: 40px; color: #bbb;">
+                    <h2>No hay servidores disponibles para este contenido.</h2>
+                </div>
+                `}
+
+                <script>
+                    const videoServers = ${serversJson};
+                    let jwPlayerInstances = {};
+
+                    function cambiarServidor(serverIndex, clickedButton) {
+                        // Stop all players
+                        Object.values(jwPlayerInstances).forEach(player => { if (player) player.stop(); });
+                        document.querySelectorAll('.player-container iframe').forEach(frame => { if (frame.src) frame.src = ''; });
+                        // Hide all player containers
+                        document.querySelectorAll('.player-container').forEach(c => c.classList.add('hidden'));
+                        
+                        const server = videoServers[serverIndex];
+                        if (!server) return;
+
+                        const container = document.querySelector('.player-container[data-player-index="' + serverIndex + '"]');
+                        if (!container) return;
+                        
+                        container.classList.remove('hidden');
+
+                        if (server.type === 'direct') {
+                            initJWPlayer(serverIndex, server.url);
+                        } else {
+                            const iframe = container.querySelector('iframe');
+                            if(iframe && iframe.src !== server.url) {
+                                 iframe.src = server.url;
+                            }
+                        }
+
+                        // Update active button style
+                        document.querySelectorAll('.servidor-btn').forEach(btn => btn.classList.remove('active'));
+                        if (clickedButton) clickedButton.classList.add('active');
+                    }
+
+                    function initJWPlayer(index, url) {
+                        const containerId = 'jwplayer-container-' + index;
+                        if (jwPlayerInstances[index] && jwPlayerInstances[index].getState() !== 'destroyed') {
+                            jwPlayerInstances[index].load([{ file: url, label: "HD" }]);
+                            jwPlayerInstances[index].play();
+                        } else {
+                            jwPlayerInstances[index] = jwplayer(containerId).setup({
+                                sources: [{ file: url, label: "HD" }],
+                                aspectratio: "16:9", width: "100%", height: "100%", autostart: true, skin: { name: "bekle" }
+                            });
+                            jwPlayerInstances[index].on('error', function() {
+                                alert('Error al cargar este video. Intenta con otro servidor.');
+                                const activeBtn = document.querySelector('.servidor-btn.active');
+                                const nextBtn = activeBtn ? activeBtn.nextElementSibling : null;
+                                if(nextBtn && nextBtn.classList.contains('servidor-btn')) {
+                                    nextBtn.click();
+                                }
+                            });
+                        }
+                    }
+
+                    // On page load, if there are servers, initialize the first one.
+                    document.addEventListener('DOMContentLoaded', () => {
+                        if (videoServers.length > 0) {
+                            const firstServer = videoServers[0];
+                            if (firstServer.type === 'direct') {
+                                initJWPlayer(0, firstServer.url);
+                            }
+                        }
+                    });
+                <\/script>
+            </body>
+            </html>`;
+
+            document.documentElement.innerHTML = newHtml;
+        }
+
+    </script>
+    <style>
+...existing content...
+
+
+</body>
+</html>
